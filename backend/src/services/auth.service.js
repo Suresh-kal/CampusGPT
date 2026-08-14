@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const registerUserService = async ({ name, email, password }) => {
   if (!name || !email || !password) {
@@ -25,6 +26,52 @@ const registerUserService = async ({ name, email, password }) => {
   return safeUser;
 };
 
+const loginUserService = async ({ email, password }) => {
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
+
+  const user = await User.findOne({ email }).select("+passwordHash");
+
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    user.passwordHash
+  );
+
+  if (!isPasswordValid) {
+    throw new Error("Invalid credentials");
+  }
+
+  const token = jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    }
+  );
+
+  const safeUser = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    department: user.department,
+  };
+
+  return {
+    token,
+    user: safeUser,
+  };
+};
+
 module.exports = {
   registerUserService,
+  loginUserService,
 };
