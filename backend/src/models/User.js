@@ -22,15 +22,41 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
-    role: {
+   role: {
+  type: String,
+  enum: ["student", "teacher", "admin"],
+  default: "student",
+},
+
+department: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Department",
+  default: null,
+},
+
+studentId: {
+  type: String,
+  default: null,
+},
+
+    employeeId: {
       type: String,
-      enum: ["student", "teacher", "admin"],
-      default: "student",
+      default: null,
     },
 
-    department: {
+    mustChangePassword: {
+      type: Boolean,
+      default: true,
+    },
+
+    passwordResetToken: {
       type: String,
-      default: "",
+      default: null,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+      default: null,
     },
 
     preferences: {

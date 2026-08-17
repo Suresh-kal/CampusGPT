@@ -2,10 +2,36 @@ const express = require("express");
 const router = express.Router();
 
 const { authenticate } = require("../middleware/auth.middleware");
-const { getCurrentUser } = require("../controllers/user.controller");
-
-
 const { authorize } = require("../middleware/role.middleware");
+
+const {
+  createUser,
+  getCurrentUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+} = require("../controllers/user.controller");
+
+router.post(
+  "/",
+  authenticate,
+  authorize("admin"),
+  createUser
+);
+
+router.get(
+  "/",
+  authenticate,
+  authorize("admin"),
+  getAllUsers
+);
+
+router.get(
+  "/me",
+  authenticate,
+  getCurrentUser
+);
 
 router.get(
   "/admin",
@@ -18,7 +44,26 @@ router.get(
     });
   }
 );
-router.get("/me", authenticate, getCurrentUser);
 
+router.get(
+  "/:id",
+  authenticate,
+  authorize("admin"),
+  getUserById
+);
+
+router.put(
+  "/:id",
+  authenticate,
+  authorize("admin"),
+  updateUser
+);
+
+router.delete(
+  "/:id",
+  authenticate,
+  authorize("admin"),
+  deleteUser
+);
 
 module.exports = router;
