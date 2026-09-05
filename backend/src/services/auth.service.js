@@ -39,6 +39,13 @@ const loginUserService = async ({ email, password }) => {
     throw new Error("Invalid credentials");
   }
 
+  // Check whether the account has been deactivated by an admin
+  if (user.isActive === false) {
+    throw new Error(
+      "Your account has been deactivated. Please contact the administrator."
+    );
+  }
+
   const isPasswordValid = await bcrypt.compare(
     password,
     user.passwordHash
@@ -124,7 +131,6 @@ const forgotPasswordService = async (email) => {
   if (!user) {
     throw new Error("User not found");
   }
-  
 
   const resetToken = crypto
     .randomBytes(32)
@@ -138,7 +144,7 @@ const forgotPasswordService = async (email) => {
 
   const resetUrl =
     `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-  
+
   const message = `
     <h2>CampusGPT Password Reset</h2>
     <p>Hello ${user.name},</p>
@@ -148,6 +154,7 @@ const forgotPasswordService = async (email) => {
     </a>
     <p>This link will expire in 15 minutes.</p>
   `;
+
   console.log("Sending email to:", user.email);
 
   await sendEmail({
@@ -186,7 +193,6 @@ const resetPasswordService = async (
 
   user.passwordHash = hashedPassword;
   user.mustChangePassword = false;
-
   user.passwordResetToken = null;
   user.passwordResetExpires = null;
 
@@ -196,7 +202,6 @@ const resetPasswordService = async (
     message: "Password reset successful",
   };
 };
-
 
 module.exports = {
   registerUserService,

@@ -101,6 +101,14 @@ const getUserByIdService = async (id) => {
 };
 
 const updateUserService = async (id, data) => {
+  // Account status must only be changed
+  // through the dedicated status endpoint.
+  if (Object.prototype.hasOwnProperty.call(data, "isActive")) {
+    throw new Error(
+      "Account status must be updated through the status endpoint."
+    );
+  }
+
   if (data.department) {
     const departmentExists = await Department.findById(
       data.department
@@ -141,10 +149,35 @@ const deleteUserService = async (id) => {
   };
 };
 
+// Activate or deactivate a user account
+const updateUserStatusService = async (id, isActive) => {
+  if (typeof isActive !== "boolean") {
+    throw new Error("isActive must be a boolean");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { isActive },
+    {
+      returnDocument: "after",
+      runValidators: true,
+    }
+  )
+    .populate("department", "name code")
+    .select("-passwordHash");
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
+
 module.exports = {
   createUserService,
   getAllUsersService,
   getUserByIdService,
   updateUserService,
   deleteUserService,
+  updateUserStatusService,
 };

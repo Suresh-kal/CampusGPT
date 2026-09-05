@@ -252,6 +252,9 @@ const processBulkRegistration = async (buffer) => {
             : null,
 
         mustChangePassword: true,
+
+        // New bulk users are active by default
+        isActive: true,
       });
 
       results.successful.push({

@@ -22,22 +22,22 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
-   role: {
-  type: String,
-  enum: ["student", "teacher", "admin"],
-  default: "student",
-},
+    role: {
+      type: String,
+      enum: ["student", "teacher", "admin"],
+      default: "student",
+    },
 
-department: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "Department",
-  default: null,
-},
+    department: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Department",
+      default: null,
+    },
 
-studentId: {
-  type: String,
-  default: null,
-},
+    studentId: {
+      type: String,
+      default: null,
+    },
 
     employeeId: {
       type: String,
@@ -45,6 +45,12 @@ studentId: {
     },
 
     mustChangePassword: {
+      type: Boolean,
+      default: true,
+    },
+
+    // Account status managed by admin
+    isActive: {
       type: Boolean,
       default: true,
     },

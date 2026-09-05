@@ -4,6 +4,7 @@ const {
   getUserByIdService,
   updateUserService,
   deleteUserService,
+  updateUserStatusService,
 } = require("../services/user.service");
 
 const createUser = async (req, res) => {
@@ -24,11 +25,20 @@ const createUser = async (req, res) => {
 };
 
 const getCurrentUser = async (req, res) => {
-  return res.status(200).json({
-    success: true,
-    message: "User fetched successfully",
-    user: req.user,
-  });
+  try {
+    const user = await getUserByIdService(req.user.id);
+
+    return res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 const getAllUsers = async (req, res) => {
@@ -102,6 +112,29 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Activate or deactivate a user account
+const updateUserStatus = async (req, res) => {
+  try {
+    const user = await updateUserStatusService(
+      req.params.id,
+      req.body.isActive
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: user.isActive
+        ? "User account activated successfully"
+        : "User account deactivated successfully",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getCurrentUser,
@@ -109,4 +142,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  updateUserStatus,
 };

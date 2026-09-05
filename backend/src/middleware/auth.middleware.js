@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -18,7 +19,29 @@ const authenticate = (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    req.user = decoded;
+    // Fetch the current user to verify account status
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User account not found",
+      });
+    }
+
+    // Block inactive accounts even if their JWT is still valid
+    if (user.isActive === false) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Your account has been deactivated. Please contact the administrator.",
+      });
+    }
+
+    req.user = {
+      ...decoded,
+      isActive: user.isActive,
+    };
 
     next();
   } catch (error) {

@@ -11,6 +11,7 @@ const {
   getUserById,
   updateUser,
   deleteUser,
+  updateUserStatus,
 } = require("../controllers/user.controller");
 
 router.post(
@@ -57,6 +58,13 @@ router.put(
   authenticate,
   authorize("admin"),
   updateUser
+);
+
+router.patch(
+  "/:id/status",
+  authenticate,
+  authorize("admin"),
+  updateUserStatus
 );
 
 router.delete(
