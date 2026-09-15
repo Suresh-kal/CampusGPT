@@ -26,6 +26,23 @@ import TeacherChangePassword from "./pages/teacher/TeacherChangePassword";
 
 import TeacherChat from "./pages/teacher/TeacherChat";
 
+// Admin Pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
+import AdminUsers from "./pages/admin/AdminUsers";
+
+import AdminBulkRegistration from "./pages/admin/AdminBulkRegistration";
+
+import AdminDepartments from "./pages/admin/AdminDepartments";
+
+import AdminDocuments from "./pages/admin/AdminDocuments";
+
+import AdminNotifications from "./pages/admin/AdminNotifications";
+
+import AdminProfile from "./pages/admin/AdminProfile";
+
+import AdminSettings from "./pages/admin/AdminSettings";
+
 function App() {
   return (
     <Routes>
@@ -81,13 +98,54 @@ function App() {
         element={<TeacherChangePassword />}
       />
 
-      
+    {/* ============================================================
+    ADMIN DASHBOARD
+============================================================ */}
 
-      {/* =====================================================
-          ADMIN DASHBOARD
-      ===================================================== */}
+<Route
+  path="/admin"
+  element={<AdminDashboard />}
+/>
 
-      <Route path="/admin" element={<div>Admin Dashboard</div>} />
+<Route
+  path="/admin/dashboard"
+  element={<AdminDashboard />}
+/>
+
+<Route
+  path="/admin/users"
+  element={<AdminUsers />}
+/>
+
+<Route
+  path="/admin/bulk-registration"
+  element={<AdminBulkRegistration />}
+/>
+
+<Route
+  path="/admin/departments"
+  element={<AdminDepartments />}
+/>
+
+<Route
+  path="/admin/documents"
+  element={<AdminDocuments />}
+/>
+
+<Route
+  path="/admin/notifications"
+  element={<AdminNotifications />}
+/>
+
+<Route
+  path="/admin/profile"
+  element={<AdminProfile />}
+/>
+
+<Route
+  path="/admin/settings"
+  element={<AdminSettings />}
+/>
 
       {/* =====================================================
           UNKNOWN ROUTES

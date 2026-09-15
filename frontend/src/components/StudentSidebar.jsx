@@ -4,33 +4,38 @@ import { useTheme } from "../context/useTheme";
 function StudentSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const { theme, toggleTheme } = useTheme();
 
   const menuItems = [
     {
       label: "Dashboard",
       path: "/student",
+      icon: "🏠",
     },
     {
       label: "Chat",
       path: "/chat",
+       icon: "🤖",
     },
     {
       label: "Documents",
       path: "/documents",
+       icon: "📚",
     },
     {
       label: "Notifications",
       path: "/notifications",
+      icon: "🔔",
     },
     {
       label: "Profile",
       path: "/profile",
+      icon: "👤",
     },
     {
       label: "Settings",
       path: "/settings",
+      icon: "⚙️",
     },
   ];
 
@@ -40,6 +45,13 @@ function StudentSidebar() {
     return isActive
       ? "w-full rounded-lg bg-slate-800 px-4 py-3 text-left text-sm font-medium text-white"
       : "w-full rounded-lg px-4 py-3 text-left text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white";
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/login", { replace: true });
   }
 
   return (
@@ -60,6 +72,7 @@ function StudentSidebar() {
         {menuItems.map((item) => (
           <button
             key={item.path}
+            type="button"
             onClick={() => navigate(item.path)}
             className={getButtonClass(item.path)}
           >
@@ -70,24 +83,29 @@ function StudentSidebar() {
 
       {/* Bottom Section */}
       <div className="mt-auto space-y-3">
-
         {/* Theme Toggle */}
         <button
+          type="button"
           onClick={toggleTheme}
           className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
         >
           <span>Appearance</span>
 
           <span className="text-xs text-slate-400">
-            {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+            {theme === "light"
+              ? "🌙 Dark"
+              : "☀️ Light"}
           </span>
         </button>
 
         {/* Logout */}
-        <button className="w-full rounded-lg px-4 py-3 text-left text-sm text-red-400 transition hover:bg-slate-800">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-full rounded-lg px-4 py-3 text-left text-sm text-red-400 transition hover:bg-slate-800 hover:text-red-300"
+        >
           Logout
         </button>
-
       </div>
     </aside>
   );
