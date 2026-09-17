@@ -1,134 +1,135 @@
-# CampusGPT AI Service
+# 🎓 CampusGPT AI Service
 
-AI and RAG microservice for the CampusGPT university assistant.
+<p align="center">
+  <b>AI & RAG Microservice for the CampusGPT University Assistant</b>
+</p>
 
-This service is responsible for document processing, NLP-based query analysis, retrieval, access-controlled RAG, conversation context, and local LLM answer generation.
-
----
-
-## 1. Overview
-
-CampusGPT AI Service provides the AI layer for the CampusGPT application.
-
-It uses:
-
-- FastAPI for the HTTP API
-- LangChain for the RAG pipeline
-- ChromaDB for vector storage
-- Ollama for local LLM inference
-- Qwen3 4B for answer generation
-- `nomic-embed-text` for embeddings
-- PyPDF / PDFium / python-docx for document processing
-
-The AI service is designed to work with the existing Node/Express backend.
+<p align="center">
+  FastAPI · LangChain · ChromaDB · Ollama · Qwen3 4B
+</p>
 
 ---
 
-## 2. Responsibilities
+## 📌 Overview
 
-### AI Service owns
+**CampusGPT AI Service** is the AI and Retrieval-Augmented Generation (RAG) microservice for the CampusGPT university assistant.
 
-- Query normalization
-- Query classification
-- Entity extraction
-- Query routing
-- PDF/DOCX document loading
-- Timetable parsing
-- Metadata enrichment
-- Text chunking
-- Embeddings
-- ChromaDB vector storage
-- Metadata-based retrieval
-- Access-controlled document retrieval
-- RAG context construction
-- Local LLM generation
-- Conversation context
-- Grounding checks
-- Source metadata
+It processes college documents, understands user queries, retrieves relevant information, and generates grounded answers using a local Large Language Model (LLM).
 
-### Node/Express backend owns
+The service is designed to work with the existing **Node.js / Express backend** rather than replacing it.
 
-- Authentication
-- User management
-- Database
-- Document ownership
-- Authorization decisions
-- User/document relationships
-- Backend business logic
-- Frontend integration
+### Core Responsibilities
 
-The backend sends the AI service the document IDs that the current user is allowed to access.
+- 📄 Document ingestion and processing
+- 🧹 Text cleaning and chunking
+- 🧠 NLP-based query analysis
+- 🔎 Semantic document retrieval
+- 🗓️ Structured timetable retrieval
+- 🔐 Document-level access control
+- 📚 Retrieval-Augmented Generation
+- 💬 Conversation context handling
+- 🤖 Local LLM answer generation
+- 🧩 Source metadata and citations
+- 🛡️ Grounding and fallback handling
 
 ---
 
-## 3. Architecture
+# ✨ Features
+
+| Feature | Description |
+|---|---|
+| 📄 Document Ingestion | Load and process PDF and DOCX documents |
+| 🧹 Text Processing | Clean and split documents into retrieval chunks |
+| 🧠 NLP | Query normalization, classification, and entity extraction |
+| 🔎 Semantic Search | Retrieve relevant documents using vector similarity |
+| 🗓️ Timetable Retrieval | Structured timetable parsing and metadata filtering |
+| 📚 RAG | Generate answers using retrieved college documents |
+| 🤖 Local AI | Qwen3 4B through Ollama |
+| 🔤 Embeddings | `nomic-embed-text` embeddings |
+| 🗃️ Vector Database | ChromaDB |
+| 💬 Conversations | Supports contextual follow-up questions |
+| 🔐 Access Control | Restrict retrieval using document IDs |
+| 🛡️ Grounding | Prevent unsupported answers |
+| 🌐 REST API | FastAPI endpoints |
+| 🧪 Testing | Pytest and development test scripts |
+
+---
+
+# 🏗️ Architecture
 
 ```text
-                    ┌─────────────────────┐
-                    │      Frontend       │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   Node/Express      │
-                    │      Backend        │
-                    └──────────┬──────────┘
-                               │
-                         POST /v1/chat
-                               │
-                               ▼
-              ┌────────────────────────────────┐
-              │       CampusGPT AI Service     │
-              │                                │
-              │  ┌──────────────────────────┐  │
-              │  │       NLP Pipeline       │  │
-              │  └────────────┬─────────────┘  │
-              │               │                │
-              │  ┌────────────▼─────────────┐  │
-              │  │    Query Routing         │  │
-              │  └────────────┬─────────────┘  │
-              │               │                │
-              │  ┌────────────▼─────────────┐  │
-              │  │ Access-Controlled        │  │
-              │  │ Retrieval                │  │
-              │  └────────────┬─────────────┘  │
-              │               │                │
-              │  ┌────────────▼─────────────┐  │
-              │  │ Context Builder           │  │
-              │  └────────────┬─────────────┘  │
-              │               │                │
-              │  ┌────────────▼─────────────┐  │
-              │  │ Qwen3 4B via Ollama       │  │
-              │  └────────────┬─────────────┘  │
-              │               │                │
-              │               ▼                │
-              │        Answer + Sources        │
-              └────────────────────────────────┘
+                         ┌─────────────────────┐
+                         │      CampusGPT      │
+                         │     Frontend/UI     │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │  Node / Express     │
+                         │      Backend        │
+                         └──────────┬──────────┘
+                                    │
+                              HTTP / REST
+                                    │
+                                    ▼
+              ┌────────────────────────────────────────┐
+              │          CampusGPT AI Service           │
+              │                FastAPI                  │
+              └────────────────────┬───────────────────┘
+                                   │
+                  ┌────────────────┴────────────────┐
+                  │                                 │
+                  ▼                                 ▼
+          ┌─────────────────┐              ┌─────────────────┐
+          │    NLP Layer    │              │    RAG Layer    │
+          ├─────────────────┤              ├─────────────────┤
+          │ Normalization   │              │ Retrieval       │
+          │ Classification  │              │ Metadata Filter │
+          │ Entity Extract  │              │ Context Builder │
+          │ Query Routing   │              │ Grounding       │
+          └────────┬────────┘              └────────┬────────┘
+                   │                                │
+                   │                                ▼
+                   │                       ┌─────────────────┐
+                   │                       │    ChromaDB     │
+                   │                       │  Vector Store   │
+                   │                       └────────┬────────┘
+                   │                                │
+                   │                                ▼
+                   │                       ┌─────────────────┐
+                   │                       │     Ollama      │
+                   │                       │    Qwen3 4B     │
+                   │                       └────────┬────────┘
+                   │                                │
+                   └────────────────┬───────────────┘
+                                    ▼
+                              Grounded Answer
+```
 
+---
 
-# RAG Pipeline
+# 🔄 RAG Pipeline
 
+```text
 User Query
     │
     ▼
-NLP Analysis
-    │
-    ├── Language
-    ├── Query Type
-    ├── Intent
-    └── Entities
+Query Normalization
     │
     ▼
-Query Router
+NLP Classification
     │
     ▼
-Metadata Filters
+Entity Extraction
     │
     ▼
-Access-Controlled Retrieval
+Query Routing
     │
     ▼
-ChromaDB
+Metadata Filtering
+    │
+    ▼
+Vector Similarity Search
     │
     ▼
 Relevant Documents
@@ -137,453 +138,845 @@ Relevant Documents
 Context Builder
     │
     ▼
-Qwen3 4B
+Prompt Construction
+    │
+    ▼
+Ollama / Qwen3 4B
     │
     ▼
 Grounded Answer
-    │
-    ▼
-Sources
+```
 
-# Project Structure
+---
 
-ai-services/
-│
-├── app/
-│   ├── api/
-│   │   ├── chat.py
-│   │   └── documents.py
-│   │
-│   ├── core/
-│   │
-│   ├── models/
-│   │   ├── chat.py
-│   │   └── documents.py
-│   │
-│   ├── nlp/
-│   │   ├── classifier.py
-│   │   ├── entity_extractor.py
-│   │   ├── normalizer.py
-│   │   ├── router.py
-│   │   ├── schemas.py
-│   │   └── service.py
-│   │
-│   ├── rag/
-│   │   ├── loaders/
-│   │   ├── preprocessors/
-│   │   ├── chunker.py
-│   │   ├── context_builder.py
-│   │   ├── embeddings.py
-│   │   ├── generator.py
-│   │   ├── ingestion.py
-│   │   ├── pipeline.py
-│   │   ├── retriever.py
-│   │   └── vector_store.py
-│   │
-│   └── main.py
-│
-├── data/
-│   └── Sample/test college documents
-│
-├── scripts/
-│   ├── ingest_documents.py
-│   ├── test_chunker.py
-│   ├── test_conversation.py
-│   ├── test_ingestion.py
-│   ├── test_loader.py
-│   ├── test_metadata_retrieval.py
-│   ├── test_nlp.py
-│   ├── test_preprocessor.py
-│   ├── test_rag.py
-│   ├── test_retrieval.py
-│   ├── test_retrieval_scores.py
-│   └── test_timetable_parser.py
-│
-├── tests/
-│   └── test_api.py
-│
-├── .gitignore
-├── README.md
-└── requirements.txt
+# 🧠 NLP Pipeline
 
-# Requirements
-Software
-Python 3.11+
-Ollama
-Git
-Python
+```text
+Raw Query
+    ↓
+Normalization
+    ↓
+Classification
+    ↓
+Entity Extraction
+    ↓
+Query Routing
+```
 
-Install dependencies:
+### Query Types
 
-python -m venv .venv
+```text
+GREETING
+DOCUMENT
+UNSUPPORTED
+```
 
-Activate the environment on Windows:
+### Language Support
 
-.\.venv\Scripts\Activate.ps1
+The NLP layer supports:
 
-Install dependencies:
+- English
+- Hindi
+- Hinglish
+- Mixed language patterns
 
-pip install -r requirements.txt
-7. Ollama Setup
+Example:
 
-Install Ollama on the development machine.
+```text
+Raksha Bandhan ki chutti kab hai?
+```
 
-Pull the generation model:
+---
 
-ollama pull qwen3:4b
+# 🗓️ Timetable Intelligence
 
-Pull the embedding model:
+Timetable PDFs are processed separately from normal text documents.
 
-ollama pull nomic-embed-text
+The timetable parser extracts structured information such as:
 
-Check installed models:
+```text
+Class
+Session
+Day
+Period
+Time
+Subject
+Course Code
+Faculty
+Room
+```
 
-ollama list
+Example:
 
-The service currently expects Ollama at:
+```text
+class_name: B.Tech-V(B)
+day: Monday
+period_start: 1
+period_end: 2
+time_range: 9:20 - 11:00
+subject: TOC
+course_code: CSL0502
+faculty: Dr. Aravendra Kumar Sharma
+room: MG-513 Lab
+```
 
-http://127.0.0.1:11434
+This supports structured queries such as:
 
-If required in PowerShell:
+```text
+What is my TOC class on Monday?
 
-$env:OLLAMA_HOST="127.0.0.1:11434"
-8. Models
-Generation
-Qwen3 4B
+Who teaches Cryptography?
 
-Configured in:
+What do I have in period 5 on Monday?
+```
 
-app/rag/generator.py
-Embeddings
-nomic-embed-text
+---
 
-Configured in:
+# 📚 Document Processing
 
-app/rag/vector_store.py
-9. Vector Database
+The ingestion pipeline is:
 
-The service uses:
-
-ChromaDB
-
-The local vector database is stored in:
-
-chroma_db/
-
-chroma_db/ is intentionally excluded from Git.
-
-Each developer should generate their own local vector database by ingesting the documents.
-
-10. Document Ingestion
-
-Documents can be ingested through the API:
-
-POST /v1/documents/ingest
-
-The ingestion pipeline performs:
-
-PDF / DOCX
+```text
+Document
+    ↓
+File Type Detection
     ↓
 Document Loader
     ↓
-Timetable Parser (when applicable)
+Text / Record Extraction
     ↓
 Metadata Enrichment
+    ↓
+Cleaning
     ↓
 Chunking
     ↓
 Embeddings
     ↓
 ChromaDB
+```
 
-The service currently supports:
+### Supported Formats
 
-PDF
-DOCX
-11. API Endpoints
+- PDF
+- DOCX
 
-The public AI service endpoints are:
+### Document Processing Libraries
 
-GET    /health
+- PyPDF
+- pypdfium2
+- python-docx
+- docx2txt
+- pdfplumber
 
-POST   /v1/documents/ingest
+---
 
-DELETE /v1/documents/{document_id}
+# 🔤 Embeddings
 
-POST   /v1/chat
-12. Health Check
-Request
-GET /health
-Response
+### Embedding Model
+
+```text
+nomic-embed-text
+```
+
+### Embedding Dimension
+
+```text
+768
+```
+
+Embeddings are stored in ChromaDB and used for semantic similarity search.
+
+---
+
+# 🤖 Local LLM
+
+CampusGPT uses a local LLM through Ollama.
+
+### Generation Model
+
+```text
+Qwen3 4B
+```
+
+### Ollama Endpoint
+
+```text
+http://127.0.0.1:11434
+```
+
+The RAG prompt instructs the model to:
+
+- Use retrieved college documents as the factual source
+- Avoid outside knowledge
+- Avoid inventing information
+- Preserve document facts
+- Answer only the current question
+- Avoid unrelated information
+- Clearly indicate when information is unavailable
+
+---
+
+# 🔐 Access-Controlled Retrieval
+
+The AI service supports document-level access control.
+
+The backend can provide:
+
+```json
 {
-  "status": "ok",
-  "service": "campusgpt-ai",
-  "version": "1.0.0"
+  "accessible_document_ids": [
+    "document-001",
+    "document-002"
+  ]
 }
-13. Chat API
-Endpoint
+```
+
+The retriever restricts vector search to documents the user is allowed to access.
+
+```text
+User
+ ↓
+Backend Authorization
+ ↓
+Allowed Document IDs
+ ↓
+AI Service
+ ↓
+Filtered ChromaDB Retrieval
+ ↓
+RAG
+```
+
+---
+
+# 💬 Conversation Context
+
+The chat API supports conversation history.
+
+Example:
+
+```json
+{
+  "message": "Who teaches it?",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Who teaches Cryptography?"
+    },
+    {
+      "role": "assistant",
+      "content": "Cryptography is taught by ..."
+    }
+  ]
+}
+```
+
+Conversation history helps understand references such as:
+
+```text
+it
+they
+that subject
+there
+this
+```
+
+Previous assistant responses are **not treated as factual evidence**. Retrieved college documents remain the factual source for RAG answers.
+
+---
+
+# 🛡️ Grounding & Fallbacks
+
+The service checks whether retrieved documents are relevant to the detected intent and entities before generating an answer.
+
+If the required information cannot be grounded in the available college documents, the service returns a fallback instead of generating unsupported information.
+
+Example:
+
+```text
+I couldn't find this information in the available
+college documents.
+```
+
+---
+
+# 🛠️ Technology Stack
+
+### Backend
+
+- Python
+- FastAPI
+- Pydantic
+- Uvicorn
+
+### AI / RAG
+
+- LangChain
+- LangChain Ollama
+- LangChain Chroma
+- ChromaDB
+- Ollama
+
+### LLM
+
+```text
+Qwen3 4B
+```
+
+### Embeddings
+
+```text
+nomic-embed-text
+```
+
+### Testing
+
+- Pytest
+- HTTPX
+
+---
+
+# 📁 Project Structure
+
+```text
+ai-services/
+│
+├── app/
+│   ├── api/
+│   ├── core/
+│   ├── models/
+│   ├── nlp/
+│   └── rag/
+│       ├── loaders/
+│       └── preprocessors/
+│
+├── data/
+├── scripts/
+├── tests/
+│
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# ⚙️ Installation
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/Suresh-kal/CampusGPT.git
+cd CampusGPT/ai-services
+```
+
+## 2. Create Virtual Environment
+
+### Windows PowerShell
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# 🦙 Ollama Setup
+
+Start Ollama:
+
+```bash
+ollama serve
+```
+
+Pull the required models:
+
+```bash
+ollama pull qwen3:4b
+ollama pull nomic-embed-text
+```
+
+Verify:
+
+```bash
+ollama list
+```
+
+Required models:
+
+```text
+qwen3:4b
+nomic-embed-text
+```
+
+---
+
+# ▶️ Run the AI Service
+
+From:
+
+```text
+CampusGPT/ai-services
+```
+
+run:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Service:
+
+```text
+http://127.0.0.1:8000
+```
+
+FastAPI documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🔌 API Reference
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/health` | Service health |
+| `POST` | `/v1/chat` | AI chat |
+| `POST` | `/v1/documents/ingest` | Ingest document |
+| `DELETE` | `/v1/documents/{document_id}` | Delete document |
+
+## Chat
+
+```http
 POST /v1/chat
-Request
+```
+
+Request:
+
+```json
 {
   "message": "When is the Raksha Bandhan holiday?",
   "conversation": [],
   "user_context": null,
   "accessible_document_ids": []
 }
-Conversation format
-[
-  {
-    "role": "user",
-    "content": "Who teaches DSA?"
-  },
-  {
-    "role": "assistant",
-    "content": "Dr. Aravendra Kumar Sharma teaches DSA."
-  }
-]
+```
 
-The conversation history is used to help the model understand follow-up questions.
+Response:
 
-Retrieved college documents remain the factual source.
-
-Access-controlled retrieval
-
-The backend can provide:
-
+```json
 {
-  "accessible_document_ids": [
-    "document-001",
-    "document-002"
-  ]
-}
-
-The AI service will restrict retrieval to those documents.
-
-This allows the backend to control which documents the user is allowed to access.
-
-Response
-{
-  "answer": "9:20 - 11:00 in MG-513 Lab",
-  "sources": [
-    {
-      "document_id": "test-btech-v-b-001",
-      "title": "B.Tech V(B) Timetable",
-      "page": 2
-    }
-  ],
+  "answer": "The Raksha Bandhan holiday is ...",
+  "sources": [],
   "query_type": "DOCUMENT",
   "grounded": true
 }
-14. Document Ingestion API
-Endpoint
+```
+
+## Document Ingestion
+
+```http
 POST /v1/documents/ingest
-Example request
+```
+
+Request:
+
+```json
 {
-  "document_id": "test-btech-v-b-001",
-  "title": "B.Tech V(B) Timetable",
-  "file_path": "D:\\CampusGPT\\ai-services\\data\\B.Tech-V(B).pdf",
-  "document_type": "TIMETABLE",
+  "document_id": "document-001",
+  "title": "B.Tech Timetable",
+  "file_path": "data/B.Tech-V(B).pdf",
+  "document_type": null,
   "department": "CSE",
   "semester": 5,
   "visibility": "PUBLIC",
   "tags": [
     "timetable",
-    "CSE",
-    "semester-5"
+    "cse"
   ]
 }
-Response
+```
+
+Response:
+
+```json
 {
   "success": true,
-  "document_id": "test-btech-v-b-001",
+  "document_id": "document-001",
   "chunks_created": 20
 }
-15. Delete Document API
-Endpoint
+```
+
+## Delete Document
+
+```http
 DELETE /v1/documents/{document_id}
+```
 
-Example:
+Response:
 
-DELETE /v1/documents/test-btech-v-b-001
-Response
+```json
 {
   "success": true,
-  "document_id": "test-btech-v-b-001",
+  "document_id": "document-001",
   "chunks_deleted": 20
 }
-16. Running the Service
+```
 
-From the ai-services directory:
+---
 
-.\.venv\Scripts\Activate.ps1
-
-Start FastAPI:
-
-uvicorn app.main:app --reload
-
-The service will normally be available at:
-
-http://127.0.0.1:8000
-
-Swagger documentation:
-
-http://127.0.0.1:8000/docs
-17. Running Tests
+# 🧪 Testing
 
 Run the complete test suite:
 
+```powershell
 python -m pytest -v
+```
 
-Current API test coverage includes:
+Current verified result:
 
-Health endpoint
-Greeting handling
-Unsupported queries
-Authorized document retrieval
-Unauthorized document blocking
-Multiple authorized documents
-Empty access list
-Empty message validation
-
-The current baseline is:
-
+```text
 8 passed
-18. Sample Data
+```
 
-The data/ directory contains sample college documents used for development and RAG testing.
+Tests cover:
 
-The local ChromaDB is not stored in Git.
+- Health endpoint
+- Greeting handling
+- Unsupported queries
+- Timetable retrieval
+- Authorized document retrieval
+- Unauthorized document retrieval
+- Multiple authorized documents
+- Empty access list
+- Empty message validation
 
-To recreate the vector database, ingest the sample documents again.
+### Development Tests
 
-19. Backend Integration
+```powershell
+python scripts/test_nlp.py
+python scripts/test_retrieval.py
+python scripts/test_timetable_parser.py
+python scripts/test_ingestion.py
+python scripts/test_conversation.py
+python scripts/test_rag.py
+```
 
-The Node/Express backend should communicate with this service through the documented API.
+---
 
-For chat:
+# 📦 Vector Database
 
-Frontend
-   ↓
-Node/Express Backend
-   ↓
-POST /v1/chat
-   ↓
-CampusGPT AI Service
-   ↓
-RAG
-   ↓
-Response
-   ↓
-Node/Express Backend
-   ↓
-Frontend
+ChromaDB is used as the local vector database.
 
-The backend should provide the document IDs the current user is allowed to access:
+### Database Directory
 
-{
-  "accessible_document_ids": [
-    "document-001",
-    "document-002"
-  ]
-}
-
-The AI service should not be treated as the system of record for users or permissions.
-
-20. Important Development Notes
-Do not commit
-.venv/
-.idea/
+```text
 chroma_db/
+```
+
+### Collection
+
+```text
+campusgpt
+```
+
+The vector database is generated locally and excluded from Git.
+
+Documents use deterministic IDs based on their source and content, helping repeated ingestion remain idempotent and reducing duplicate vector records.
+
+---
+
+# 📄 Sample Documents
+
+The `data/` directory contains sample college documents used for development and RAG testing.
+
+Examples include:
+
+```text
+B.Tech-V(B).pdf
+Notice_.pdf
+Notice_for_emedial_Classes-2.pdf
+Office_Order___Raksha_Bandan_Holiday.pdf
+Orientation_Programme_Notice.pdf
+Student_Notice_15.08.2026.pdf
+Uniform_Notice_2026 .pdf
+syllabus_updated_DSA.pdf
+```
+
+> **Note:** Only include documents in a public repository if the project team has permission to redistribute them.
+
+---
+
+# 🔗 Backend Integration
+
+```text
+Frontend
+   │
+   ▼
+Node / Express Backend
+   │
+   │ HTTP / REST
+   ▼
+FastAPI AI Service
+   │
+   ├── NLP
+   ├── Retrieval
+   ├── RAG
+   └── Local LLM
+```
+
+### AI Service Responsibilities
+
+```text
+Document ingestion
+Document parsing
+Text cleaning
+Chunking
+Embeddings
+Vector storage
+Retrieval
+Metadata filtering
+RAG
+Context building
+Prompting
+Local LLM generation
+Grounding
+Fallback handling
+```
+
+### Main Backend Responsibilities
+
+The Node/Express backend remains responsible for the main application/backend layer, including application-level authorization and frontend integration.
+
+The backend passes permitted document IDs to the AI service when access-controlled retrieval is required.
+
+---
+
+# 📊 Current Status
+
+## Completed
+
+- [x] FastAPI AI service
+- [x] Health endpoint
+- [x] Chat endpoint
+- [x] Document ingestion endpoint
+- [x] Document deletion endpoint
+- [x] PDF document loading
+- [x] DOCX document loading
+- [x] Text cleaning
+- [x] Recursive text chunking
+- [x] Timetable parser
+- [x] Metadata enrichment
+- [x] ChromaDB vector store
+- [x] Ollama embeddings
+- [x] Qwen3 4B generation
+- [x] NLP normalization
+- [x] Query classification
+- [x] Entity extraction
+- [x] Query routing
+- [x] Metadata-aware retrieval
+- [x] Access-controlled retrieval
+- [x] Conversation context
+- [x] RAG grounding checks
+- [x] Source metadata
+- [x] API validation
+- [x] Automated tests
+- [x] Development scripts
+- [x] Documentation
+
+---
+
+# 🚧 Roadmap
+
+- [ ] Query rewriting for conversational follow-ups
+- [ ] Better retrieval for generic document questions
+- [ ] User-context based filtering
+- [ ] Improved retrieval ranking
+- [ ] RAG evaluation framework
+- [ ] Retrieval quality metrics
+- [ ] Improved citation handling
+- [ ] Structured logging
+- [ ] Production monitoring
+- [ ] Performance optimization
+- [ ] Expanded document type support
+
+---
+
+# 👨‍💻 AI Service Ownership
+
+The AI Service focuses on the AI layer of CampusGPT.
+
+```text
+                    CampusGPT
+                        │
+           ┌────────────┴────────────┐
+           │                         │
+           ▼                         ▼
+     Main Backend               AI Service
+     Node / Express               FastAPI
+           │                         │
+           │                   ┌─────┴─────┐
+           │                   │           │
+           │                  NLP         RAG
+           │                               │
+           │                          Local LLM
+           │
+           └──────────── API ──────────────┘
+```
+
+### AI Service
+
+Responsible for:
+
+- NLP
+- RAG
+- Embeddings
+- Retrieval
+- Context handling
+- Prompting
+- Local LLM integration
+- Grounding
+- Citations
+- Fallbacks
+- AI evaluation
+
+### Main Backend
+
+Responsible for:
+
+- Application backend
+- Authentication
+- Authorization
+- User management
+- Main application APIs
+- Frontend integration
+- Passing authorized document IDs to the AI service
+
+---
+
+# 📌 Important Development Notes
+
+### Ollama
+
+Ollama must be running before using the local LLM or embeddings:
+
+```bash
+ollama serve
+```
+
+Expected endpoint:
+
+```text
+http://127.0.0.1:11434
+```
+
+### Local Vector Database
+
+The ChromaDB database is generated locally:
+
+```text
+chroma_db/
+```
+
+It should not be committed to Git.
+
+### Environment Files
+
+The repository excludes local and secret files such as:
+
+```text
 .env
+.env.*
+.venv/
+chroma_db/
+.idea/
 __pycache__/
 .pytest_cache/
-Do commit
-app/
-scripts/
-tests/
-data/
-requirements.txt
-README.md
-.gitignore
-Local vector database
+```
 
-Each developer should create their own:
+---
 
-chroma_db/
+# 🚀 Quick Start
 
-by running document ingestion.
-
-Ollama
-
-Ollama must be installed and running locally.
-
-21. Current Status
-Completed
-NLP pipeline
-Query classification
-Entity extraction
-Query routing
-PDF/DOCX loading
-Timetable parsing
-Metadata enrichment
-Chunking
-Vector storage
-Metadata filtering
-Access-controlled retrieval
-RAG context construction
-Qwen3 4B generation
-Conversation context
-FastAPI API
-Document ingestion API
-Document deletion API
-API automated tests
-Planned improvements
-Conversation-aware query rewriting
-More advanced user-context filtering
-Improved generic-query relevance detection
-RAG evaluation metrics
-Production logging and monitoring
-Additional automated tests
-22. Quick Start
-# Clone repository
-git clone <repository-url>
+```powershell
+# Clone
+git clone https://github.com/Suresh-kal/CampusGPT.git
 
 # Enter AI service
-cd CampusGPT\ai-services
+cd CampusGPTi-services
 
 # Create environment
 python -m venv .venv
 
-# Activate environment
-.\.venv\Scripts\Activate.ps1
+# Activate
+.venv\Scripts\Activate.ps1
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Start Ollama models
+# Start Ollama in another terminal
+ollama serve
+
+# Pull models
 ollama pull qwen3:4b
 ollama pull nomic-embed-text
 
-# Run tests
-python -m pytest -v
-
-# Start API
+# Start AI service
 uvicorn app.main:app --reload
+```
 
-API:
-
-http://127.0.0.1:8000
-
-Swagger:
-
-http://127.0.0.1:8000/docs
-
-Save the file.
-
-### One correction before we commit
-
-I intentionally documented your **current actual setup**:
+Open:
 
 ```text
-Generation → qwen3:4b
-Embeddings → nomic-embed-text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🧪 Verification Checklist
+
+```text
+☑ Python environment created
+☑ Dependencies installed
+☑ Ollama running
+☑ Qwen3 4B available
+☑ nomic-embed-text available
+☑ AI service starts successfully
+☑ /health works
+☑ Documents can be ingested
+☑ Documents can be deleted
+☑ Chat endpoint works
+☑ NLP tests pass
+☑ Retrieval tests pass
+☑ Conversation tests pass
+☑ API tests pass
+```
+
+---
+
+# 📜 License
+
+This project is developed as part of the **CampusGPT university project**.
+
+---
+
+<p align="center">
+  <b>CampusGPT AI Service</b><br>
+  Intelligent · Grounded · Local AI
+</p>
