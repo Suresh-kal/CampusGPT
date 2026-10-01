@@ -121,14 +121,14 @@ function Documents() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 transition-colors duration-300 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 transition-colors duration-300 dark:bg-slate-950">
       {/* Common Sidebar */}
 
       <StudentSidebar />
 
       {/* Main Content */}
 
-      <main className="lg:ml-64">
+      <main className="pt-16 lg:ml-64 lg:pt-0">
         <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
           {/* Header */}
 
@@ -149,19 +149,19 @@ function Documents() {
           {/* Loading State */}
 
           {loading ? (
-            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 shadow-sm transition-colors dark:border-slate-800 dark:bg-blue-600 dark:text-slate-400">
               Loading documents...
             </div>
           ) : error ? (
             /* Error State */
 
-            <div className="rounded-xl border border-red-200 bg-white p-6 text-red-600 shadow-sm transition-colors dark:border-red-900/60 dark:bg-slate-900 dark:text-red-400">
+            <div className="rounded-xl border border-red-200 bg-white p-6 text-red-600 shadow-sm transition-colors dark:border-red-900/60 dark:bg-blue-600 dark:text-red-400">
               {error}
             </div>
           ) : documents.length === 0 ? (
             /* Empty State */
 
-            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 shadow-sm transition-colors dark:border-slate-800 dark:bg-blue-600 dark:text-slate-400">
               No documents available.
             </div>
           ) : (
@@ -171,7 +171,7 @@ function Documents() {
               {documents.map((document) => (
                 <div
                   key={document._id}
-                  className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+                  className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-blue-600 dark:hover:border-slate-700"
                 >
                   {/* Document Type */}
 
@@ -238,7 +238,7 @@ function Documents() {
                       onClick={() =>
                         handleOpenDocument(document)
                       }
-                      className="flex-1 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                      className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
                     >
                       Open
                     </button>
@@ -248,7 +248,7 @@ function Documents() {
                       onClick={() =>
                         handleDownloadDocument(document)
                       }
-                      className="flex-1 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                      className="flex-1 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-blue-700"
                     >
                       Download
                     </button>

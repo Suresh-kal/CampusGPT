@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import ChangePassword from "./pages/ChangePassword";
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Student Pages
 import StudentDashboard from "./pages/StudentDashboard";
@@ -57,9 +60,14 @@ function App() {
 
       <Route path="/change-password" element={<ChangePassword />} />
 
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+
       {/* =====================================================
           STUDENT DASHBOARD
       ===================================================== */}
+      <Route element={<ProtectedRoute />}>
 
       <Route path="/student" element={<StudentDashboard />} />
 
@@ -81,7 +89,7 @@ function App() {
           TEACHER DASHBOARD
       ===================================================== */}
 
-      <Route path="/teacher" element={<TeacherDashboard />} />
+      <Route path="/teacher" element={<Navigate to="/teacher/dashboard" replace />} />
 
       <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
 
@@ -104,7 +112,7 @@ function App() {
 
 <Route
   path="/admin"
-  element={<AdminDashboard />}
+  element={<Navigate to="/admin/dashboard" replace />}
 />
 
 <Route
@@ -150,6 +158,7 @@ function App() {
       {/* =====================================================
           UNKNOWN ROUTES
       ===================================================== */}
+      </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>

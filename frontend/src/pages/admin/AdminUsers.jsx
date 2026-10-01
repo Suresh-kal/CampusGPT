@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import AdminSidebar from "../../components/AdminSidebar";
 
 import {
@@ -96,6 +96,11 @@ function AdminUsers() {
     console.error("Failed to load departments:", err);
   }
 }
+
+  useEffect(() => {
+    fetchUsers();
+    fetchDepartments();
+  }, []);
 
   /* =========================================================
      FILTER USERS
@@ -389,7 +394,7 @@ function AdminUsers() {
     <div className="min-h-screen bg-slate-100 dark:bg-[#090b10]">
       <AdminSidebar />
 
-      <main className="min-h-screen lg:ml-64">
+      <main className="min-h-screen pt-16 lg:ml-64 lg:pt-0">
         {/* =====================================================
             HEADER
         ===================================================== */}

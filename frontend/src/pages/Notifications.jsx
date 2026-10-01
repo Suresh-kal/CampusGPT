@@ -44,13 +44,13 @@ function Notifications() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 transition-colors duration-300 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 transition-colors duration-300 dark:bg-slate-950">
       
       {/* Common Sidebar */}
       <StudentSidebar />
 
       {/* Main Content */}
-      <main className="lg:ml-64">
+      <main className="pt-16 lg:ml-64 lg:pt-0">
         <div className="mx-auto max-w-5xl px-6 py-8 lg:px-10">
 
           <header className="mb-8">
@@ -68,15 +68,15 @@ function Notifications() {
           </header>
 
           {loading ? (
-            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 transition-colors dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 transition-colors dark:border-slate-800 dark:bg-blue-600 dark:text-slate-400">
               Loading notifications...
             </div>
           ) : error ? (
-            <div className="rounded-xl border border-red-200 bg-white p-6 text-red-600 transition-colors dark:border-red-900/50 dark:bg-slate-900 dark:text-red-400">
+            <div className="rounded-xl border border-red-200 bg-white p-6 text-red-600 transition-colors dark:border-red-900/50 dark:bg-blue-600 dark:text-red-400">
               {error}
             </div>
           ) : notifications.length === 0 ? (
-            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 transition-colors dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 transition-colors dark:border-slate-800 dark:bg-blue-600 dark:text-slate-400">
               No notifications available.
             </div>
           ) : (
@@ -84,7 +84,7 @@ function Notifications() {
               {notifications.map((notification) => (
                 <div
                   key={notification._id}
-                  className="rounded-xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-black/20"
+                  className="rounded-xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-md dark:border-slate-800 dark:bg-blue-600 dark:hover:border-slate-700 dark:hover:shadow-black/20"
                 >
                   <div className="flex items-start justify-between gap-4">
 

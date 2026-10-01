@@ -26,6 +26,29 @@ import ChatHeader from "../components/chat/ChatHeader";
    ICONS
 ========================================================= */
 
+const SUGGESTED_PROMPTS = [
+  {
+    title: "Study & Exam Prep",
+    description: "Summarize lecture notes, create quick revision guides, and practice exam questions.",
+    starterText: "Help me summarize my notes and create a revision cheat sheet for upcoming exams."
+  },
+  {
+    title: "Explain Complex Concepts",
+    description: "Break down difficult topics, theories, or formulas in simple, step-by-step terms.",
+    starterText: "Explain this concept step-by-step with real-world examples: "
+  },
+  {
+    title: "Assignments & Project Ideas",
+    description: "Brainstorm project topics, outline reports, and debug programming code.",
+    starterText: "Help me brainstorm project ideas and create a project structure for: "
+  },
+  {
+    title: "Ask CampusGPT Anything",
+    description: "Ask questions about campus queries, syllabus guidance, or general academic doubt solving.",
+    starterText: "I have a question regarding my coursework: "
+  }
+];
+
 /* =========================================================
    CHAT COMPONENT
 ========================================================= */
@@ -92,6 +115,7 @@ function Chat() {
   /* Menu */
 
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   /* Refs */
 
@@ -338,7 +362,7 @@ function Chat() {
   async function handleSendMessage(event) {
     event.preventDefault();
 
-    if (!input.trim() || !selectedSession || sending) {
+    if (!input.trim() || sending) {
       return;
     }
 
@@ -347,13 +371,29 @@ function Chat() {
     }
 
     const userMessage = input.trim();
-
+    
     try {
       setSending(true);
       setError("");
       setInput("");
+      
+      let currentSession = selectedSession;
+      
+      if (!currentSession) {
+        const createResponse = await createChatSession();
+        if (!createResponse.success) {
+          setError(createResponse.message || "Unable to create chat.");
+          setInput(userMessage);
+          setSending(false);
+          return;
+        }
+        currentSession = createResponse.data;
+        setSessions((prev) => [currentSession, ...prev]);
+        setSelectedSession(currentSession);
+        setMessages([]);
+      }
 
-      const response = await sendChatMessage(selectedSession._id, userMessage);
+      const response = await sendChatMessage(currentSession._id, userMessage);
 
       if (!response.success) {
         setError(response.message || "Unable to send message.");
@@ -393,7 +433,7 @@ function Chat() {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
 
-      if (input.trim() && selectedSession && !sending) {
+      if (input.trim() && !sending) {
         handleSendMessage(event);
       }
     }
@@ -615,7 +655,7 @@ function Chat() {
           MAIN DASHBOARD SIDEBAR
       ===================================================== */}
 
-      <StudentSidebar />
+      <StudentSidebar hideOnMobile={true} />
 
       <main className="h-screen lg:ml-64">
         <div className="flex h-full flex-col overflow-hidden">
@@ -627,6 +667,7 @@ function Chat() {
             darkMode={darkMode}
             setDarkMode={setDarkMode}
             onCreateChat={handleCreateChat}
+            onOpenMobileMenu={() => setIsMobileDrawerOpen(true)}
           />
 
           {/* =================================================
@@ -659,11 +700,16 @@ function Chat() {
               editingTitle={editingTitle}
               deletingSessionId={deletingSessionId}
               openMenuId={openMenuId}
+              isMobileMenuOpen={isMobileDrawerOpen}
               setEditingTitle={setEditingTitle}
               setEditingTitleId={setEditingTitleId}
               setOpenMenuId={setOpenMenuId}
+              setIsMobileMenuOpen={setIsMobileDrawerOpen}
               onCreateChat={handleCreateChat}
-              onSelectSession={handleSelectSession}
+              onSelectSession={(session) => {
+                handleSelectSession(session);
+                setIsMobileDrawerOpen(false);
+              }}
               onRenameSession={handleRenameSession}
               onDeleteSession={handleDeleteSession}
               onClearAllChats={handleClearAllChats}
@@ -722,29 +768,53 @@ function Chat() {
                       onMessageFeedback={handleMessageFeedback}
                     />
                   </div>
-
-                  {/* =========================================
-                      INPUT AREA
-                  ========================================= */}
-
-                  <ChatInput
-                    input={input}
-                    setInput={setInput}
-                    sending={sending}
-                    isListening={isListening}
-                    textareaRef={textareaRef}
-                    onSubmit={handleSendMessage}
-                    onKeyDown={handleInputKeyDown}
-                    onVoiceInput={handleVoiceInput}
-                  />
                 </>
               ) : (
                 /* =============================================
                     WELCOME SCREEN
                 ============================================= */
+                <div className="flex flex-1 flex-col px-6 pb-2">
+                  <div className="flex flex-1 flex-col items-center justify-center">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-xl font-semibold text-white shadow-xl dark:bg-blue-600 dark:shadow-blue-950/30">
+                      AI
+                    </div>
+                    <h2 className="mt-6 text-2xl font-semibold text-slate-900 dark:text-white">
+                      How can I help you today?
+                    </h2>
+                  </div>
 
-                <ChatWelcome onCreateChat={handleCreateChat} />
+                  <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2">
+                    {SUGGESTED_PROMPTS.map((prompt, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setInput(prompt.starterText);
+                          setTimeout(() => {
+                            textareaRef.current?.focus();
+                          }, 10);
+                        }}
+                        className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-white/[0.06] dark:bg-[#0d1017] dark:text-slate-300 dark:hover:bg-white/[0.04]"
+                      >
+                        {prompt.title}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
+
+              {/* =========================================
+                  INPUT AREA
+              ========================================= */}
+              <ChatInput
+                input={input}
+                setInput={setInput}
+                sending={sending}
+                isListening={isListening}
+                textareaRef={textareaRef}
+                onSubmit={handleSendMessage}
+                onKeyDown={handleInputKeyDown}
+                onVoiceInput={handleVoiceInput}
+              />
             </section>
           </div>
         </div>

@@ -687,7 +687,7 @@ function TeacherDocuments() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#090b10]">
       <TeacherSidebar />
 
-      <main className="ml-64 min-h-screen p-8">
+      <main className="pt-24 lg:pt-8 lg:ml-64 min-h-screen p-4 sm:p-8">
         <div className="mb-8 flex items-start justify-between gap-6">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
@@ -706,7 +706,7 @@ function TeacherDocuments() {
               setError("");
               setSuccessMessage("");
             }}
-            className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500"
+            className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
           >
             + Upload Document
           </button>
@@ -843,7 +843,7 @@ function TeacherDocuments() {
 
             {filteredDocuments.length === 0 ? (
               <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm dark:border-white/[0.06] dark:bg-[#0d1017]">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-2xl dark:bg-white/[0.06]">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-2xl dark:bg-white/[0.06]">
                   📚
                 </div>
 
@@ -867,7 +867,7 @@ function TeacherDocuments() {
                       setError("");
                       setSuccessMessage("");
                     }}
-                    className="mt-6 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500"
+                    className="mt-6 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
                   >
                     Upload Your First Document
                   </button>
@@ -914,7 +914,7 @@ function TeacherDocuments() {
                           >
                             <td className="px-6 py-5">
                               <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-lg dark:bg-white/[0.06]">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-lg dark:bg-white/[0.06]">
                                   📄
                                 </div>
 
@@ -972,7 +972,7 @@ function TeacherDocuments() {
                                   onClick={() =>
                                     handleView(document)
                                   }
-                                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
+                                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
                                 >
                                   View
                                 </button>
@@ -984,7 +984,7 @@ function TeacherDocuments() {
                                       document
                                     )
                                   }
-                                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
+                                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
                                 >
                                   Download
                                 </button>
@@ -996,7 +996,7 @@ function TeacherDocuments() {
                                       document
                                     )
                                   }
-                                  className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500"
+                                  className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
                                 >
                                   Edit
                                 </button>
@@ -1016,7 +1016,7 @@ function TeacherDocuments() {
 
       {/* Upload Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-600/50 p-4 backdrop-blur-sm">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-white/[0.08] dark:bg-[#0d1017]">
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5 dark:border-white/[0.06]">
               <div>
@@ -1032,7 +1032,7 @@ function TeacherDocuments() {
               <button
                 type="button"
                 onClick={closeUploadModal}
-                className="rounded-lg px-3 py-2 text-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
+                className="rounded-lg px-3 py-2 text-xl text-slate-500 hover:bg-slate-50 dark:hover:bg-white/[0.06]"
               >
                 ×
               </button>
@@ -1206,7 +1206,7 @@ function TeacherDocuments() {
                   type="file"
                   accept=".pdf,.doc,.docx,.ppt,.pptx"
                   onChange={handleFileChange}
-                  className="block w-full cursor-pointer rounded-xl border border-slate-200 bg-white text-sm text-slate-600 file:mr-4 file:border-0 file:bg-slate-100 file:px-4 file:py-3 file:text-sm file:font-semibold dark:border-white/[0.08] dark:bg-[#11151d] dark:text-slate-300 dark:file:bg-white/[0.06] dark:file:text-white"
+                  className="block w-full cursor-pointer rounded-xl border border-slate-200 bg-white text-sm text-slate-600 file:mr-4 file:border-0 file:bg-slate-50 file:px-4 file:py-3 file:text-sm file:font-semibold dark:border-white/[0.08] dark:bg-[#11151d] dark:text-slate-300 dark:file:bg-white/[0.06] dark:file:text-white"
                   required
                 />
 
@@ -1228,7 +1228,7 @@ function TeacherDocuments() {
                   type="button"
                   onClick={closeUploadModal}
                   disabled={uploading}
-                  className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
+                  className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
                 >
                   Cancel
                 </button>
@@ -1236,7 +1236,7 @@ function TeacherDocuments() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
+                  className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
                 >
                   {uploading
                     ? "Uploading..."
@@ -1250,7 +1250,7 @@ function TeacherDocuments() {
 
       {/* Edit Modal */}
       {showEditModal && editingDocument && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-600/50 p-4 backdrop-blur-sm">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-white/[0.08] dark:bg-[#0d1017]">
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5 dark:border-white/[0.06]">
               <div>
@@ -1266,7 +1266,7 @@ function TeacherDocuments() {
               <button
                 type="button"
                 onClick={closeEditModal}
-                className="rounded-lg px-3 py-2 text-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
+                className="rounded-lg px-3 py-2 text-xl text-slate-500 hover:bg-slate-50 dark:hover:bg-white/[0.06]"
               >
                 ×
               </button>
@@ -1453,7 +1453,7 @@ function TeacherDocuments() {
                   type="button"
                   onClick={closeEditModal}
                   disabled={updating}
-                  className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
+                  className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
                 >
                   Cancel
                 </button>
@@ -1461,7 +1461,7 @@ function TeacherDocuments() {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
+                  className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
                 >
                   {updating
                     ? "Saving..."
@@ -1475,7 +1475,7 @@ function TeacherDocuments() {
 
       {/* Document Info Modal */}
       {viewingDocument && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-600/50 p-4 backdrop-blur-sm">
           <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-white/[0.08] dark:bg-[#0d1017]">
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5 dark:border-white/[0.06]">
               <div>
@@ -1489,7 +1489,7 @@ function TeacherDocuments() {
                 onClick={() =>
                   setViewingDocument(null)
                 }
-                className="rounded-lg px-3 py-2 text-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
+                className="rounded-lg px-3 py-2 text-xl text-slate-500 hover:bg-slate-50 dark:hover:bg-white/[0.06]"
               >
                 ×
               </button>
@@ -1592,7 +1592,7 @@ function TeacherDocuments() {
                       (tag) => (
                         <span
                           key={tag}
-                          className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-white/[0.06] dark:text-slate-300"
+                          className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-white/[0.06] dark:text-slate-300"
                         >
                           {tag}
                         </span>
@@ -1608,7 +1608,7 @@ function TeacherDocuments() {
                   onClick={() =>
                     handleDownload(viewingDocument)
                   }
-                  className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
+                  className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.06]"
                 >
                   Download
                 </button>
@@ -1618,7 +1618,7 @@ function TeacherDocuments() {
                   onClick={() =>
                     handleView(viewingDocument)
                   }
-                  className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500"
+                  className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
                 >
                   Open File
                 </button>

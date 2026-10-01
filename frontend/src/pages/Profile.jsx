@@ -35,7 +35,7 @@ function Profile() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-100 text-slate-500 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-400">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-400">
         Loading profile...
       </div>
     );
@@ -43,17 +43,17 @@ function Profile() {
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-100 text-red-600 transition-colors duration-300 dark:bg-slate-950 dark:text-red-400">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-red-600 transition-colors duration-300 dark:bg-slate-950 dark:text-red-400">
         {error}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 transition-colors duration-300 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 transition-colors duration-300 dark:bg-slate-950">
       <StudentSidebar />
 
-      <main className="lg:ml-64">
+      <main className="pt-16 lg:ml-64 lg:pt-0">
         <div className="mx-auto max-w-5xl px-6 py-8 lg:px-10">
           
           <header className="mb-8">
@@ -71,7 +71,7 @@ function Profile() {
           </header>
 
           {/* Personal Information */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 transition-colors duration-300 dark:border-slate-800 dark:bg-blue-600">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
               Personal Information
             </h2>
@@ -122,7 +122,7 @@ function Profile() {
           </div>
 
           {/* Account Information */}
-          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900">
+          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 transition-colors duration-300 dark:border-slate-800 dark:bg-blue-600">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
               Account Information
             </h2>

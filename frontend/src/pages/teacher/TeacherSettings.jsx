@@ -9,7 +9,7 @@ function TeacherSettings() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#090b10]">
       <TeacherSidebar />
 
-      <main className="ml-64 min-h-screen p-8">
+      <main className="pt-24 lg:pt-8 lg:ml-64 min-h-screen p-4 sm:p-8">
         {/* Page Heading */}
         <div className="mb-8">
           <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -49,7 +49,7 @@ function TeacherSettings() {
 
               <button
                 type="button"
-                className="rounded-lg bg-slate-900 px-5 py-3 font-medium text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
+                className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
               >
                 🌙 Switch to Dark
               </button>
@@ -98,7 +98,7 @@ function TeacherSettings() {
               <button
                 type="button"
                 onClick={() => navigate("/teacher/change-password")}
-                className="rounded-lg bg-slate-900 px-5 py-3 font-medium text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
+                className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
               >
                 Change Password
               </button>

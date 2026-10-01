@@ -89,7 +89,7 @@ function ChangePassword() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-100 px-6 py-12">
+    <main className="min-h-screen bg-slate-50 px-6 py-12">
       <div className="mx-auto w-full max-w-md">
 
         {/* Brand and Back Navigation */}
@@ -148,7 +148,7 @@ function ChangePassword() {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 required
-                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
+                className="w-full rounded-lg border border-slate-200 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
               />
             </div>
 
@@ -167,7 +167,7 @@ function ChangePassword() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
-                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
+                className="w-full rounded-lg border border-slate-200 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
               />
             </div>
 
@@ -186,7 +186,7 @@ function ChangePassword() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
+                className="w-full rounded-lg border border-slate-200 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
               />
             </div>
 
@@ -209,7 +209,7 @@ function ChangePassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-lg bg-slate-900 px-4 py-3 font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? "Changing password..." : "Change Password"}
               </button>
@@ -220,7 +220,7 @@ function ChangePassword() {
                   type="button"
                   onClick={handleBack}
                   disabled={loading}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full rounded-lg border border-slate-200 px-4 py-3 font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Cancel
                 </button>

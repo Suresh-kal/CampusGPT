@@ -42,7 +42,7 @@ function TeacherProfile() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#090b10]">
       <TeacherSidebar />
 
-      <main className="ml-64 min-h-screen p-8">
+      <main className="pt-24 lg:pt-8 lg:ml-64 min-h-screen p-4 sm:p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
             My Profile
@@ -70,7 +70,7 @@ function TeacherProfile() {
         {!loading && !error && user && (
           <div className="max-w-3xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-white/[0.06] dark:bg-[#0d1017]">
             <div className="flex items-center gap-5 border-b border-slate-200 pb-6 dark:border-white/[0.06]">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-900 text-2xl font-bold text-white dark:bg-white dark:text-slate-900">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl font-bold text-white dark:bg-white dark:text-slate-900">
                 {(user.name || "U").charAt(0).toUpperCase()}
               </div>
 

@@ -55,12 +55,12 @@ function TeacherDashboard() {
   } = data || {};
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Teacher Sidebar */}
       <TeacherSidebar />
 
       {/* Main Content */}
-      <main className="lg:ml-64">
+      <main className="pt-16 lg:ml-64 lg:pt-0">
         <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
 
           {/* Header */}
@@ -83,7 +83,7 @@ function TeacherDashboard() {
           <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
 
             {/* Employee ID */}
-            <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-blue-600">
               <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                 Employee ID
               </p>
@@ -94,7 +94,7 @@ function TeacherDashboard() {
             </div>
 
             {/* Department */}
-            <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-blue-600">
               <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                 Department
               </p>
@@ -109,7 +109,7 @@ function TeacherDashboard() {
             </div>
 
             {/* Documents Uploaded */}
-            <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-blue-600">
               <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                 Documents Uploaded
               </p>
@@ -138,7 +138,7 @@ function TeacherDashboard() {
                 {uploadedDocuments.map((document) => (
                   <div
                     key={document._id}
-                    className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900"
+                    className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-blue-600"
                   >
                     <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
                       {document.documentType}
@@ -167,7 +167,7 @@ function TeacherDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+              <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-blue-600 dark:text-slate-400">
                 No uploaded documents available.
               </div>
             )}
@@ -184,7 +184,7 @@ function TeacherDashboard() {
                 {recentNotifications.map((notification) => (
                   <div
                     key={notification._id}
-                    className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900"
+                    className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-blue-600"
                   >
                     <h4 className="font-medium text-slate-900 dark:text-white">
                       {notification.title}
@@ -197,7 +197,7 @@ function TeacherDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+              <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-blue-600 dark:text-slate-400">
                 No recent notifications available.
               </div>
             )}

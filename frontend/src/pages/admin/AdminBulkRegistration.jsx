@@ -157,7 +157,7 @@ function AdminBulkRegistration() {
           MAIN CONTENT
       ===================================================== */}
 
-      <main className="min-h-screen lg:ml-64">
+      <main className="min-h-screen pt-16 lg:ml-64 lg:pt-0">
         {/* =====================================================
             HEADER
         ===================================================== */}
