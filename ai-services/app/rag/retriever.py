@@ -37,9 +37,7 @@ def _in(field: str, values: list) -> dict:
 
 
 def _and(conditions: list[dict]) -> dict | None:
-    """
-    Create a Chroma $and filter when multiple conditions exist.
-    """
+    """Create a Chroma $and filter when multiple conditions exist."""
 
     if not conditions:
         return None
@@ -60,32 +58,9 @@ def build_access_filter(
     accessible_document_ids: list[str] | None,
 ) -> dict | None:
     """
-    Build a Chroma filter restricting retrieval to documents
-    explicitly authorized by the backend.
+    Build a Chroma filter restricting retrieval to authorized documents.
 
-    Examples:
-
-        ["doc-1"]
-
-        ->
-        {
-            "document_id": {
-                "$eq": "doc-1"
-            }
-        }
-
-    Multiple IDs:
-
-        ["doc-1", "doc-2"]
-
-        ->
-        {
-            "document_id": {
-                "$in": ["doc-1", "doc-2"]
-            }
-        }
-
-    Empty/None means no additional access restriction.
+    An empty or None list means no additional access restriction.
     """
 
     if not accessible_document_ids:
@@ -116,27 +91,7 @@ def combine_filters(
     metadata_filter: dict | None,
     access_filter: dict | None,
 ) -> dict | None:
-    """
-    Combine NLP metadata constraints and access constraints.
-
-    Both conditions must be satisfied.
-
-    Example:
-
-        metadata:
-            subject = TOC
-            day = Monday
-
-        access:
-            document_id = doc-123
-
-        result:
-
-            $and:
-                subject = TOC
-                day = Monday
-                document_id = doc-123
-    """
+    """Combine metadata and access filters using logical AND."""
 
     if metadata_filter is None:
         return access_filter
@@ -144,8 +99,7 @@ def combine_filters(
     if access_filter is None:
         return metadata_filter
 
-    # If metadata_filter is already an $and expression,
-    # flatten it to avoid unnecessary nesting.
+    # Flatten an existing $and expression.
     metadata_conditions = metadata_filter.get("$and")
 
     if metadata_conditions:
@@ -168,26 +122,15 @@ def build_metadata_filter(
     nlp_result: NLPResult,
 ) -> dict | None:
     """
-    Build a retrieval filter based on NLP intent/entities.
+    Build a retrieval filter based on NLP intent and entities.
 
     Retrieval strategy:
-
-        timetable
-            -> timetable records
-
-        faculty
-            -> timetable records + subject
-
-        syllabus
-            -> SYLLABUS + subject
-
-        holiday
-            -> HOLIDAY_NOTICE
-
-        event
-            -> NOTICE
-
-    ChromaDB compound conditions use $and.
+        timetable     -> timetable records
+        faculty       -> timetable records
+        syllabus      -> SYLLABUS documents
+        holiday       -> HOLIDAY_NOTICE documents
+        event         -> NOTICE or EVENT_NOTICE documents
+        exam_schedule -> EXAM_SCHEDULE, NOTICE, or CIRCULAR documents
     """
 
     entities = nlp_result.entities
@@ -201,7 +144,6 @@ def build_metadata_filter(
 
     if intent == "timetable":
 
-        # Only timetable records.
         conditions.append(
             _eq(
                 "file_type",
@@ -225,7 +167,7 @@ def build_metadata_filter(
                 )
             )
 
-        # Exact single period.
+        # Exact single-period filter.
         if (
             entities.period_start is not None
             and entities.period_end is not None
@@ -260,7 +202,6 @@ def build_metadata_filter(
 
     elif intent == "faculty":
 
-        # Faculty information comes primarily from timetable.
         conditions.append(
             _eq(
                 "file_type",
@@ -281,6 +222,38 @@ def build_metadata_filter(
                 _eq(
                     "faculty",
                     entities.person_name,
+                )
+            )
+
+    # ===============================================================
+    # EXAM SCHEDULES AND EXAMINATION NOTICES
+    # ===============================================================
+
+    elif intent == "exam_schedule":
+        # Examination information is often uploaded as a general notice
+        # rather than categorized as an EXAM_SCHEDULE. Search all supported
+        # exam-related document categories so the type inferred from the
+        # question does not exclude the notice that contains the answer.
+        conditions.append(
+            _in(
+                "document_type",
+                ["EXAM_SCHEDULE", "NOTICE", "CIRCULAR"],
+            )
+        )
+
+        if entities.department:
+            conditions.append(
+                _eq(
+                    "department",
+                    entities.department,
+                )
+            )
+
+        if entities.semester is not None:
+            conditions.append(
+                _eq(
+                    "semester",
+                    entities.semester,
                 )
             )
 
@@ -323,14 +296,10 @@ def build_metadata_filter(
     # ===============================================================
 
     elif intent == "event":
-
-        # Current corpus contains event information in notices.
-        conditions.append(
-            _eq(
-                "document_type",
-                "NOTICE",
-            )
-        )
+        # Notices are frequently uploaded with missing or inconsistent
+        # document_type metadata. Keep the event search semantic and only
+        # apply the trusted access-control filter below.
+        pass
 
     # ===============================================================
     # Generic document_type entity
@@ -342,6 +311,7 @@ def build_metadata_filter(
             "holiday",
             "syllabus",
             "event",
+            "exam_schedule",
         }
     ):
         conditions.append(
@@ -363,32 +333,15 @@ def _period_matches(
     requested_start: int | None,
     requested_end: int | None,
 ) -> bool:
-    """
-    Check whether a timetable record overlaps the requested period.
-
-    Example:
-
-        Document: periods 5-6
-        Query:    periods 5-6
-            -> True
-
-        Document: periods 5-6
-        Query:    period 6
-            -> True
-    """
+    """Check whether a timetable record overlaps the requested period."""
 
     if requested_start is None:
         return True
 
     metadata = document.metadata
 
-    record_start = metadata.get(
-        "period_start"
-    )
-
-    record_end = metadata.get(
-        "period_end"
-    )
+    record_start = metadata.get("period_start")
+    record_end = metadata.get("period_end")
 
     if record_start is None or record_end is None:
         return False
@@ -412,27 +365,13 @@ def retrieve_documents_with_metadata(
     accessible_document_ids: list[str] | None = None,
 ) -> List[Document]:
     """
-    Main CampusGPT retrieval function.
-
-    Uses:
-
-        1. NLP metadata constraints
-        2. Access-control constraints
-        3. Semantic similarity
-
-    accessible_document_ids restricts retrieval to documents
-    explicitly authorized by the backend.
+    Retrieve documents using metadata, access constraints, and similarity.
     """
 
     vector_store = get_vector_store()
 
-    # ---------------------------------------------------------------
-    # Build filters
-    # ---------------------------------------------------------------
-
-    metadata_filter = build_metadata_filter(
-        nlp_result
-    )
+    # Build metadata and access filters.
+    metadata_filter = build_metadata_filter(nlp_result)
 
     access_filter = build_access_filter(
         accessible_document_ids
@@ -449,8 +388,6 @@ def retrieve_documents_with_metadata(
 
     if nlp_result.intent == "timetable":
 
-        # Retrieve a larger candidate set because period filtering
-        # happens in Python after Chroma retrieval.
         documents = vector_store.similarity_search(
             nlp_result.normalized_query,
             k=TIMETABLE_TOP_K,
@@ -459,9 +396,7 @@ def retrieve_documents_with_metadata(
 
         entities = nlp_result.entities
 
-        # Python-side period overlap filtering.
         if entities.period_start is not None:
-
             documents = [
                 document
                 for document in documents
@@ -479,7 +414,6 @@ def retrieve_documents_with_metadata(
     # ---------------------------------------------------------------
 
     if combined_filter is not None:
-
         return vector_store.similarity_search(
             nlp_result.normalized_query,
             k=top_k,
@@ -544,19 +478,11 @@ def retrieve_documents_with_metadata_and_scores(
     top_k: int = DEFAULT_TOP_K,
     accessible_document_ids: list[str] | None = None,
 ) -> List[Tuple[Document, float]]:
-    """
-    Metadata-aware retrieval with relevance scores.
-
-    Primarily used for evaluation/debugging.
-
-    Also respects accessible_document_ids.
-    """
+    """Metadata-aware retrieval with relevance scores."""
 
     vector_store = get_vector_store()
 
-    metadata_filter = build_metadata_filter(
-        nlp_result
-    )
+    metadata_filter = build_metadata_filter(nlp_result)
 
     access_filter = build_access_filter(
         accessible_document_ids
@@ -567,12 +493,8 @@ def retrieve_documents_with_metadata_and_scores(
         access_filter,
     )
 
-    # ---------------------------------------------------------------
-    # No filter
-    # ---------------------------------------------------------------
-
+    # No filter.
     if combined_filter is None:
-
         return (
             vector_store
             .similarity_search_with_relevance_scores(
@@ -581,10 +503,7 @@ def retrieve_documents_with_metadata_and_scores(
             )
         )
 
-    # ---------------------------------------------------------------
-    # Filtered retrieval
-    # ---------------------------------------------------------------
-
+    # Filtered retrieval.
     results = (
         vector_store
         .similarity_search_with_relevance_scores(
@@ -594,16 +513,12 @@ def retrieve_documents_with_metadata_and_scores(
         )
     )
 
-    # ---------------------------------------------------------------
-    # Period filtering
-    # ---------------------------------------------------------------
-
+    # Apply timetable period filtering.
     if nlp_result.intent == "timetable":
 
         entities = nlp_result.entities
 
         if entities.period_start is not None:
-
             results = [
                 (document, score)
                 for document, score in results
